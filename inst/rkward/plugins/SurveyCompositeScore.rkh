@@ -1,0 +1,46 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Survey Composite Score
+	</title>
+	<summary>
+		Calculate row-wise scores (Mean/Sum) within a survey design object.
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_VrblSlct" />
+		<setting id="vars_cp">
+		</setting>
+		<caption id="tab_Settings" />
+		<setting id="method_cp">
+		</setting>
+		<setting id="na_cp">
+		</setting>
+		<caption id="tab_OtptOptn" />
+		<setting id="name_cp">
+		</setting>
+		<setting id="save_cp">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

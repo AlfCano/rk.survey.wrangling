@@ -1,0 +1,117 @@
+<!DOCTYPE
+	rkpluginmap
+>
+<document
+	base_prefix=""
+	namespace="SurveyBatchTransform"
+	id="SurveyBatchTransform_rkward"
+	po_id="SurveyBatchTransform_rkward"
+	priority="medium"
+>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<about
+		name="rk.survey.wrangling"
+		shortinfo="A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
+		longinfo="A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
+		version="0.0.9"
+		releasedate="2026-01-08"
+		url="https://github.com/AlfCano/rk.survey.wrangling"
+		license="GPL (&gt;= 3)"
+	>
+		<author
+			given="Alfonso"
+			family="Cano"
+			email="alfonso.cano@correo.buap.mx"
+			role="aut, cre"
+		/>
+	</about>
+	<require
+		map="rkward::menu"
+	/>
+	<require
+		map="rkward::embedded"
+	/>
+	<components>
+		<component
+			id="cmp_SrvyBtchTrnsfrmSrvyBtchRc"
+			label="Survey Batch Recode"
+			type="standard"
+			file="plugins/SurveyBatchRecode.xml"
+		>
+		</component>
+		<component
+			id="cmp_SrvyBtchTrnsfrmSrvyCmpstS"
+			label="Survey Composite Score"
+			type="standard"
+			file="plugins/SurveyCompositeScore.xml"
+		>
+		</component>
+		<component
+			id="cmp_SrvyBtchTrnsfrmSrvyBtchTr"
+			label="Survey Batch Transform"
+			type="standard"
+			file="plugins/SurveyBatchTransform.xml"
+		>
+		</component>
+	</components>
+	<hierarchy>
+		<menu
+			id="men_Survey"
+			label="Survey"
+		>
+			<menu
+				id="men_SrvyWrngln"
+				label="Survey Wrangling"
+			>
+				<entry
+					component="cmp_SrvyBtchTrnsfrmSrvyBtchRc"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="men_Survey"
+			label="Survey"
+		>
+			<menu
+				id="men_SrvyWrngln"
+				label="Survey Wrangling"
+			>
+				<entry
+					component="cmp_SrvyBtchTrnsfrmSrvyCmpstS"
+				/>
+			</menu>
+		</menu>
+		<menu
+			id="men_Survey"
+			label="Survey"
+		>
+			<menu
+				id="men_SrvyWrngln"
+				label="Survey Wrangling"
+			>
+				<entry
+					component="cmp_SrvyBtchTrnsfrmSrvyBtchTr"
+				/>
+			</menu>
+		</menu>
+	</hierarchy>
+	<!--
+		<context
+			id="x11"
+		>
+		</context>
+	-->
+	<!--
+		<context
+			id="import"
+		>
+		</context>
+	-->
+</document>

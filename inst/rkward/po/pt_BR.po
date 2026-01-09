@@ -1,0 +1,203 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: rk.survey.wrangling 0.1.0\n"
+"Report-Msgid-Bugs-To: https://mail.kde.org/mailman/listinfo/kde-i18n-doc\n"
+"POT-Creation-Date: 2026-01-08 12:00+0000\n"
+"PO-Revision-Date: 2026-01-08 12:00+0000\n"
+"Last-Translator: Your Name <your.email@example.com>\n"
+"Language-Team: Portuguese (Brazil) <kde-i18n-pt_BR@kde.org>\n"
+"Language: pt_BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 3.0\n"
+
+msgid "A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
+msgstr "Um conjunto de plugins para manipulação de objetos de pesquisa complexos usando 'srvyr' e 'survey'. Inclui transformações em lote, recodificação e pontuação dentro de desenhos amostrais."
+
+msgid "Survey Batch Transform"
+msgstr "Transformação em Lote de Pesquisa"
+
+msgid "Variables to transform"
+msgstr "Variáveis para transformar"
+
+msgid "Grouping variable(s) (Optional)"
+msgstr "Variável(is) de agrupamento (Opcional)"
+
+msgid "Grouped Calculation"
+msgstr "Cálculo Agrupado"
+
+msgid "Function"
+msgstr "Função"
+
+msgid "Logarithm (log)"
+msgstr "Logaritmo (log)"
+
+msgid "Log10 (log10)"
+msgstr "Log10 (log10)"
+
+msgid "Exponential (exp)"
+msgstr "Exponencial (exp)"
+
+msgid "Square Root (sqrt)"
+msgstr "Raiz Quadrada (sqrt)"
+
+msgid "Abs (abs)"
+msgstr "Absoluto (abs)"
+
+msgid "Standardize (scale)"
+msgstr "Padronizar (scale)"
+
+msgid "Convert to Numeric"
+msgstr "Converter para Numérico"
+
+msgid "Convert to Factor"
+msgstr "Converter para Fator"
+
+msgid "Custom..."
+msgstr "Personalizado..."
+
+msgid "Ignore NAs (na.rm = TRUE)"
+msgstr "Ignorar NAs (na.rm = TRUE)"
+
+msgid "Custom function (e.g., function(x) x^2)"
+msgstr "Função personalizada (ex: function(x) x^2)"
+
+msgid "Naming pattern (glue syntax)"
+msgstr "Padrão de nomeação (sintaxe glue)"
+
+msgid "Use <b>{.col}</b> for original name and <b>{.fn}</b> for function name.<br>Leave empty to overwrite original variables."
+msgstr "Use <b>{.col}</b> para o nome original e <b>{.fn}</b> para o nome da função.<br>Deixe vazio para sobrescrever as variáveis originais."
+
+msgid "Save to (overwrite or new object)"
+msgstr "Salvar em (sobrescrever ou novo objeto)"
+
+msgid "Preview data"
+msgstr "Pré-visualizar dados"
+
+msgid "<i>Note: Preview limited to the first selected variable and 50 rows.</i>"
+msgstr "<i>Nota: Pré-visualização limitada à primeira variável selecionada e 50 linhas.</i>"
+
+msgid "Variable Selection"
+msgstr "Seleção de Variáveis"
+
+msgid "Transformation"
+msgstr "Transformação"
+
+msgid "Output Options"
+msgstr "Opções de Saída"
+
+msgid "Survey Batch Transform: "
+msgstr "Transformação em Lote de Pesquisa: "
+
+msgid "Apply a function to multiple variables within a survey design object using srvyr."
+msgstr "Aplicar uma função a múltiplas variáveis dentro de um objeto de desenho amostral usando srvyr."
+
+msgid "Survey Batch Recode"
+msgstr "Recodificação em Lote de Pesquisa"
+
+msgid "Variables to recode"
+msgstr "Variáveis para recodificar"
+
+msgid "Mapping Rules"
+msgstr "Regras de Mapeamento"
+
+msgid "Input Data Type (Old Value)"
+msgstr "Tipo de Dados de Entrada (Valor Antigo)"
+
+msgid "Numeric / Integer"
+msgstr "Numérico / Inteiro"
+
+msgid "Character / Factor"
+msgstr "Caractere / Fator"
+
+msgid "Unmatched values (Else)"
+msgstr "Valores não correspondidos (Else)"
+
+msgid "Copy original values (Default)"
+msgstr "Copiar valores originais (Padrão)"
+
+msgid "Set to NA"
+msgstr "Definir como NA"
+
+msgid "Specific value..."
+msgstr "Valor específico..."
+
+msgid "Value"
+msgstr "Valor"
+
+msgid "Default Behavior"
+msgstr "Comportamento Padrão"
+
+msgid "Output Data Type (New Value)"
+msgstr "Tipo de Dados de Saída (Novo Valor)"
+
+msgid "Suffix"
+msgstr "Sufixo"
+
+msgid "Convert output to factor"
+msgstr "Converter saída para fator"
+
+msgid "Save result object"
+msgstr "Salvar objeto resultante"
+
+msgid "Recode Rules"
+msgstr "Regras de Recodificação"
+
+msgid "Survey Batch Recode: "
+msgstr "Recodificação em Lote de Pesquisa: "
+
+msgid "Recode multiple variables within a survey design object using srvyr."
+msgstr "Recodificar múltiplas variáveis dentro de um objeto de desenho amostral usando srvyr."
+
+msgid "Survey Composite Score"
+msgstr "Pontuação Composta de Pesquisa"
+
+msgid "Items to aggregate"
+msgstr "Itens para agregar"
+
+msgid "Aggregation Method"
+msgstr "Método de Agregação"
+
+msgid "Mean (Average)"
+msgstr "Média"
+
+msgid "Sum (Total)"
+msgstr "Soma (Total)"
+
+msgid "Median"
+msgstr "Mediana"
+
+msgid "Minimum"
+msgstr "Mínimo"
+
+msgid "Maximum"
+msgstr "Máximo"
+
+msgid "Standard Deviation (SD)"
+msgstr "Desvio Padrão (DP)"
+
+msgid "Variance"
+msgstr "Variância"
+
+msgid "Count (N valid)"
+msgstr "Contagem (N válido)"
+
+msgid "Remove NAs (na.rm = TRUE)"
+msgstr "Remover NAs (na.rm = TRUE)"
+
+msgid "Name of new variable"
+msgstr "Nome da nova variável"
+
+msgid "Save result as"
+msgstr "Salvar resultado como"
+
+msgid "Settings"
+msgstr "Configurações"
+
+msgid "Survey Composite Score Created: "
+msgstr "Pontuação Composta de Pesquisa Criada: "
+
+msgid "Calculate row-wise scores (Mean/Sum) within a survey design object."
+msgstr "Calcular pontuações por linha (Média/Soma) dentro de um objeto de desenho amostral."

@@ -1,0 +1,71 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="SurveyBatchRecode.js" />
+	<help file="SurveyBatchRecode.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Survey Batch Recode">
+		<tabbook>
+			<tab label="Variable Selection" id="tab_VrblSlct">
+				<row id="row_clmndclmVV">
+					<column id="clm_vrslctrdsl">
+						<varselector id="sel_svy_rc" />
+					</column>
+					<column id="clm_vrsltdvrsV">
+						<varslot id="vars_rc" label="Variables to recode" source="sel_svy_rc" required="true" multi="true" />
+						<stretch />
+					</column>
+				</row>
+			</tab>
+			<tab label="Recode Rules" id="tab_RecodRls">
+				<column id="clm_dIDTOVNICF">
+					<dropdown id="type_rc_in" label="Input Data Type (Old Value)">
+						<option label="Numeric / Integer" value="numeric" checked="true" />
+						<option label="Character / Factor" value="character" />
+					</dropdown>
+					<matrix id="matrix_rules" label="Mapping Rules" mode="string" horiz_headers="Old Value;New Value" />
+					<frame label="Default Behavior" id="frm_DfltBhvr">
+						<radio id="rad_else_mode" label="Unmatched values (Else)">
+							<option label="Copy original values (Default)" value="copy" checked="true" />
+							<option label="Set to NA" value="na" />
+							<option label="Specific value..." value="specific" />
+						</radio>
+						<input label="Value" id="inp_else_custom" initial="Other" />
+					</frame>
+				</column>
+			</tab>
+			<tab label="Output Options" id="tab_OtptOptn">
+				<column id="clm_dODTNVNICF">
+					<dropdown id="type_rc_out" label="Output Data Type (New Value)">
+						<option label="Numeric / Integer" value="numeric" />
+						<option label="Character / Factor" value="character" checked="true" />
+					</dropdown>
+					<input label="Suffix" id="suffix_rc" initial="_rec" />
+					<checkbox id="as_factor_rc" label="Convert output to factor" value="1" checked="true" />
+					<stretch />
+					<preview label="Preview data" id="preview_rc" mode="data" />
+					<text id="txt_iNtPrv50">
+						<i>
+							Note: Preview limited to the first selected variable and 50 rows.
+						</i>
+					</text>
+					<saveobject label="Save result object" checkable="true" checked="true" initial="design_rec" id="save_rc" />
+				</column>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>

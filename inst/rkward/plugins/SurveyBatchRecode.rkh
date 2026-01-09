@@ -1,0 +1,55 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Survey Batch Recode
+	</title>
+	<summary>
+		Recode multiple variables within a survey design object using srvyr.
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_VrblSlct" />
+		<setting id="vars_rc">
+		</setting>
+		<caption id="tab_RecodRls" />
+		<setting id="type_rc_in">
+		</setting>
+		<setting id="matrix_rules">
+		</setting>
+		<caption id="frm_DfltBhvr" />
+		<setting id="rad_else_mode">
+		</setting>
+		<setting id="inp_else_custom">
+		</setting>
+		<caption id="tab_OtptOptn" />
+		<setting id="type_rc_out">
+		</setting>
+		<setting id="suffix_rc">
+		</setting>
+		<setting id="as_factor_rc">
+		</setting>
+		<setting id="save_rc">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

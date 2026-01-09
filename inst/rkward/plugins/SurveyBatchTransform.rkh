@@ -1,0 +1,51 @@
+<!DOCTYPE rkhelp >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<title>
+		Survey Batch Transform
+	</title>
+	<summary>
+		Apply a function to multiple variables within a survey design object using srvyr.
+	</summary>
+	<usage>
+	</usage>
+	<!--
+		<section id="sct_EDITORDE" title="EDIT OR DELETE ME">
+			EDIT OR DELETE ME
+		</section>
+	-->
+	<settings>
+		<caption id="tab_VrblSlct" />
+		<setting id="vars_tr">
+		</setting>
+		<caption id="frm_GrpdClcl" />
+		<setting id="vars_group_tr">
+		</setting>
+		<caption id="tab_Trnsfrmt" />
+		<setting id="func_tr">
+		</setting>
+		<setting id="tr_narm_cbox">
+		</setting>
+		<setting id="func_cust">
+		</setting>
+		<caption id="tab_OtptOptn" />
+		<setting id="names_tr">
+		</setting>
+		<setting id="save_tr">
+		</setting>
+	</settings>
+	<!--
+		<related>
+			<ul>
+				<li>
+					<link href="rkward://rhelp/..." />
+				</li>
+			</ul>
+		</related>
+	-->
+	<technical>
+	</technical>
+</document>

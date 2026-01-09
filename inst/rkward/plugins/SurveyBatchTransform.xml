@@ -1,0 +1,84 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="SurveyBatchTransform.js" />
+	<help file="SurveyBatchTransform.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Survey Batch Transform">
+		<tabbook>
+			<tab label="Variable Selection" id="tab_VrblSlct">
+				<row id="row_cVGCGCGOVG">
+					<column id="clm_vrslctrdsl">
+						<varselector id="sel_svy_tr" />
+					</column>
+					<column id="clm_vrsVGCGCGO">
+						<varslot id="vars_tr" label="Variables to transform" source="sel_svy_tr" required="true" multi="true" />
+						<stretch />
+						<frame label="Grouped Calculation" id="frm_GrpdClcl">
+							<varslot id="vars_group_tr" label="Grouping variable(s) (Optional)" source="sel_svy_tr" multi="true" />
+						</frame>
+					</column>
+				</row>
+			</tab>
+			<tab label="Transformation" id="tab_Trnsfrmt">
+				<column id="clm_dFLL101010">
+					<dropdown id="func_tr" label="Function">
+						<option label="Logarithm (log)" value="log" checked="true" />
+						<option label="Log10 (log10)" value="log10" />
+						<option label="Exponential (exp)" value="exp" />
+						<option label="Square Root (sqrt)" value="sqrt" />
+						<option label="Abs (abs)" value="abs" />
+						<option label="Standardize (scale)" value="scale" />
+						<option label="Convert to Numeric" value="as.numeric" />
+						<option label="Convert to Factor" value="as.factor" />
+						<option label="Custom..." value="custom" />
+					</dropdown>
+					<checkbox id="tr_narm_cbox" label="Ignore NAs (na.rm = TRUE)" value="1" checked="true" />
+					<input label="Custom function (e.g., function(x) x^2)" id="func_cust" />
+					<stretch />
+				</column>
+			</tab>
+			<tab label="Output Options" id="tab_OtptOptn">
+				<column id="clm_iNULULPNP5">
+					<input label="Naming pattern (glue syntax)" id="names_tr" initial="{.col}_{.fn}" />
+					<text id="txt_UsbclbfL">
+						Use
+						<b>
+							{.col}
+						</b>
+						for original name and
+						<b>
+							{.fn}
+						</b>
+						for function name.
+						<br>
+							Leave empty to overwrite original variables.
+						</br>
+					</text>
+					<stretch />
+					<preview label="Preview data" id="preview_tr" mode="data" />
+					<text id="txt_iNtPrv50">
+						<i>
+							Note: Preview limited to the first selected variable and 50 rows.
+						</i>
+					</text>
+					<saveobject label="Save to (overwrite or new object)" checkable="true" checked="true" initial="design_tr" id="save_tr" />
+				</column>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>

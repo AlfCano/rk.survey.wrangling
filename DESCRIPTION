@@ -1,0 +1,19 @@
+Package: rk.survey.wrangling
+Type: Package
+Title: A suite of plugins for manipulating complex survey objects using
+        'srvyr' and 'survey'. Includes batch transformations, recoding,
+        and scoring within survey designs.
+Version: 0.0.9
+Date: 2026-01-08
+Author: Alfonso Cano
+Maintainer: Alfonso Cano <alfonso.cano@correo.buap.mx>
+Enhances: rkward
+Description: A suite of plugins for manipulating complex survey objects
+        using 'srvyr' and 'survey'. Includes batch transformations,
+        recoding, and scoring within survey designs.
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyLoad: yes
+URL: https://github.com/AlfCano/rk.survey.wrangling
+Authors@R: person(given="Alfonso", family="Cano",
+        email="alfonso.cano@correo.buap.mx", role=c("aut", "cre"))

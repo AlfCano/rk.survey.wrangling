@@ -1,0 +1,65 @@
+<!DOCTYPE rkplugin >
+<document>
+	<!--
+		this code was generated using the rkwarddev package.
+	perhaps don't make changes here, but in the rkwarddev script instead!
+	-->
+	<code file="SurveyCompositeScore.js" />
+	<help file="SurveyCompositeScore.rkh" />
+	<!--
+		<dependencies>
+		</dependencies>
+	-->
+	<logic>
+		<!--
+			<convert id="!edit!" sources="!edit!" mode="equals" standard="!edit!" />
+		-->
+		<!--
+			<connect governor="!edit!.state" client="!edit!.enabled" />
+		-->
+	</logic>
+	<dialog label="Survey Composite Score">
+		<tabbook>
+			<tab label="Variable Selection" id="tab_VrblSlct">
+				<row id="row_clmndclmII">
+					<column id="clm_vrslctrdsl">
+						<varselector id="sel_svy_cp" />
+					</column>
+					<column id="clm_vrsltdvrsI">
+						<varslot id="vars_cp" label="Items to aggregate" source="sel_svy_cp" required="true" multi="true" />
+						<stretch />
+					</column>
+				</row>
+			</tab>
+			<tab label="Settings" id="tab_Settings">
+				<column id="clm_dAMMAMSTSM">
+					<dropdown id="method_cp" label="Aggregation Method">
+						<option label="Mean (Average)" value="rowMeans" checked="true" />
+						<option label="Sum (Total)" value="rowSums" />
+						<option label="Median" value="median" />
+						<option label="Minimum" value="pmin" />
+						<option label="Maximum" value="pmax" />
+						<option label="Standard Deviation (SD)" value="sd" />
+						<option label="Variance" value="var" />
+						<option label="Count (N valid)" value="count" />
+					</dropdown>
+					<checkbox id="na_cp" label="Remove NAs (na.rm = TRUE)" value="1" checked="true" />
+					<stretch />
+				</column>
+			</tab>
+			<tab label="Output Options" id="tab_OtptOptn">
+				<column id="clm_iNPNP50NP5">
+					<input label="Name of new variable" id="name_cp" initial="new_score" required="true" />
+					<stretch />
+					<preview label="Preview data" id="preview_cp" mode="data" />
+					<text id="txt_iNtPrv50">
+						<i>
+							Note: Preview limited to 50 rows.
+						</i>
+					</text>
+					<saveobject label="Save result as" checkable="true" checked="true" initial="design_score" id="save_cp" />
+				</column>
+			</tab>
+		</tabbook>
+	</dialog>
+</document>
