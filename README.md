@@ -1,15 +1,17 @@
 # rk.survey.wrangling: Tidy Manipulation of Complex Surveys
 
-![Version](https://img.shields.io/badge/Version-0.1.0-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.1.1-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml)
 
 **rk.survey.wrangling** extends RKWard's capabilities to handle complex survey designs (`svydesign` objects). It leverages the `{srvyr}` package to apply modern, "tidy" manipulation verbs (like `mutate`, `group_by`, and `across`) to survey data while automatically preserving sampling weights, stratification, and variance estimation parameters.
 
-## 🚀 What's New in Version 0.1.0
+## 🚀 What's New in Version 0.1.1
 
-This is the first major release of the package. It mirrors the functionality of `rk.data.wrangling` but is strictly specialized for **Survey Design Objects**.
+This maintenance release focuses on stability and code generation accuracy:
+
+*   **Object Naming Fix:** Resolved an issue where custom result names were not being assigned correctly in the background calculation. The plugin now strictly enforces RKWard's object management rules, ensuring data is saved reliably.
 
 ### Key Highlights
 1.  **Srvyr Integration:** All operations use `as_survey()` to ensure transformations are statistically safe for complex designs.

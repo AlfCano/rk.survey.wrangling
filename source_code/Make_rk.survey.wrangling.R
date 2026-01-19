@@ -6,7 +6,7 @@ local({
   rkwarddev.required("0.08-1")
 
   plugin_name <- "rk.survey.wrangling"
-  plugin_ver <- "0.1.0"
+  plugin_ver <- "0.1.1"
 
   package_about <- rk.XML.about(
     name = plugin_name,
@@ -147,7 +147,7 @@ local({
       // MAIN MODE
       var quoted_vars = vars.map(function(v) { return "\\"" + v + "\\""; }).join(", ");
       echo("require(srvyr)\\n");
-      echo(save_name + " <- " + design_name + " %>% srvyr::as_survey()" + group_start + " %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), " + fn_call + name_arg + "))" + group_end + "\\n");
+      echo("design_tr <- " + design_name + " %>% srvyr::as_survey()" + group_start + " %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), " + fn_call + name_arg + "))" + group_end + "\\n");
 
       // Copy labels for Transform as well
       echo("\\n# Copy variable labels\\n");
@@ -259,7 +259,7 @@ local({
       echo("preview_data <- prev_svy$variables %>% dplyr::select(dplyr::all_of(c(\'" + vars[0] + "\')), dplyr::contains(\'" + suffix + "\')) %>% as.data.frame() %>% head(50)\\n");
       ' else '
       // MAIN MODE
-      echo(save_name + " <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\\n");
+      echo("design_rec <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\\n");
 
       echo("\\n# Copy variable labels to the new recoded variables\\n");
       for (var i = 0; i < vars.length; i++) {
@@ -331,7 +331,7 @@ local({
       echo("preview_data <- prev_svy$variables %>% dplyr::select(dplyr::all_of(c(" + quoted_vars + ")), dplyr::all_of(c(\"" + newname + "\"))) %>% as.data.frame() %>% head(50)\\n");
       ' else '
       // MAIN MODE
-      echo(save_name + " <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(" + newname + " = " + calc_code + ")\\n");
+      echo("design_score <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(" + newname + " = " + calc_code + ")\\n");
       ', '
     ')
   }
@@ -357,5 +357,5 @@ local({
     load = TRUE, overwrite = TRUE, show = FALSE
   )
 
-  cat("\nPlugin 'rk.survey.wrangling' (v0.1.0) generated successfully.\n")
+  cat("\nPlugin 'rk.survey.wrangling' (v0.1.1 generated successfully.\n")
 })
