@@ -1,30 +1,24 @@
 # rk.survey.wrangling: Tidy Manipulation of Complex Surveys
 
-![Version](https://img.shields.io/badge/Version-0.1.1-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.1.2-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml)
 
 **rk.survey.wrangling** extends RKWard's capabilities to handle complex survey designs (`svydesign` objects). It leverages the `{srvyr}` package to apply modern, "tidy" manipulation verbs (like `mutate`, `group_by`, and `across`) to survey data while automatically preserving sampling weights, stratification, and variance estimation parameters.
 
+## 🚀 What's New in Version 0.1.2
+
+This release creates a stable foundation for production use by addressing critical logic errors:
+
+*   **Object Assignment Fix:** Resolved a "Golden Rule" violation where the plugin attempted to save results to dynamic variable names inside the calculation block. It now correctly uses hardcoded internal names, allowing RKWard to handle the final assignment to the user's chosen object safely.
+*   **Preview Stability:** Completely rewrote the preview generation logic. It now converts the `srvyr` object to a standard data frame *before* selecting columns, ensuring the "50 rows limit" works correctly and preventing errors when subsetting complex survey objects.
+*   **Label Preservation:** Enhanced the metadata handling to ensure RKWard variable labels are preserved even after complex transformations or recoding.
+
 ## 🚀 What's New in Version 0.1.1
 
-This maintenance release focuses on stability and code generation accuracy:
-
-*   **Object Naming Fix:** Resolved an issue where custom result names were not being assigned correctly in the background calculation. The plugin now strictly enforces RKWard's object management rules, ensuring data is saved reliably.
-
-### Key Highlights
-1.  **Srvyr Integration:** All operations use `as_survey()` to ensure transformations are statistically safe for complex designs.
-2.  **Metadata Preservation:** When recoding variables, the plugin attempts to copy RKWard variable labels (`.rk.meta`) from the original variable to the new one, keeping your dataset documented.
-3.  **Performance:** Includes a smart **Live Preview** that processes only a subset of the data (50 rows) to give instant feedback on complex survey calculations.
-
-### 🌍 Internationalization
-The interface is fully localized in:
-*   🇺🇸 English (Default)
-*   🇪🇸 Spanish (`es`)
-*   🇫🇷 French (`fr`)
-*   🇩🇪 German (`de`)
-*   🇧🇷 Portuguese (Brazil) (`pt_BR`)
+*   **Robust Variable Handling:** Fixed syntax errors when variables contain spaces or special characters (e.g., `"Mucha confianza"`).
+*   **Recode Matrix:** The spreadsheet interface for recoding now correctly accepts mixed data types (text/numbers) without validation errors blocking the "Submit" button.
 
 ## ✨ Features
 
@@ -44,6 +38,14 @@ A spreadsheet-like interface for recoding variables inside a design.
 Calculate new variables based on row-wise aggregation of items.
 *   **Methods:** Mean, Sum, Median, SD, Min/Max.
 *   **Context:** Unlike standard data frames, this adds the new score directly into the survey design object, ready for weighted regression or tabulation.
+
+### 🌍 Internationalization
+The interface is fully localized in:
+*   🇺🇸 English (Default)
+*   🇪🇸 Spanish (`es`)
+*   🇫🇷 French (`fr`)
+*   🇩🇪 German (`de`)
+*   🇧🇷 Portuguese (Brazil) (`pt_BR`)
 
 ## 📦 Installation
 
@@ -81,7 +83,6 @@ This plugin relies on the following R packages:
 *   `dplyr` (Manipulation logic)
 *   `rkwarddev` (Plugin generation)
 
-
 #### Troubleshooting: Errors installing `devtools` or missing binary dependencies (Windows)
 
 If you encounter errors mentioning "non-zero exit status", "namespace is already loaded", or requirements for compilation (compiling from source) when installing packages, it is likely because the R version bundled with RKWard is older than the current CRAN standard.
@@ -101,4 +102,3 @@ This "two-step" setup (similar to how RStudio operates) ensures you have access 
 *   **Author:** Alfonso Cano (<alfonso.cano@correo.buap.mx>)
 *   **Assisted by:** Gemini, a large language model from Google.
 *   **License:** GPL (>= 3)
-
