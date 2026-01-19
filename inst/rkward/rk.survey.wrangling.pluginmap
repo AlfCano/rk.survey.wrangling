@@ -20,8 +20,8 @@
 		name="rk.survey.wrangling"
 		shortinfo="A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
 		longinfo="A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
-		version="0.0.9"
-		releasedate="2026-01-08"
+		version="0.1.1"
+		releasedate="2026-01-19"
 		url="https://github.com/AlfCano/rk.survey.wrangling"
 		license="GPL (&gt;= 3)"
 	>

@@ -3,8 +3,8 @@ Type: Package
 Title: A suite of plugins for manipulating complex survey objects using
         'srvyr' and 'survey'. Includes batch transformations, recoding,
         and scoring within survey designs.
-Version: 0.0.9
-Date: 2026-01-08
+Version: 0.1.1
+Date: 2026-01-19
 Author: Alfonso Cano
 Maintainer: Alfonso Cano <alfonso.cano@correo.buap.mx>
 Enhances: rkward
