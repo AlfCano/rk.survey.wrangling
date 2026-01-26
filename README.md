@@ -1,21 +1,21 @@
 # rk.survey.wrangling: Tidy Manipulation of Complex Surveys
 
-![Version](https://img.shields.io/badge/Version-0.1.2-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.1.3-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml)
 
 **rk.survey.wrangling** extends RKWard's capabilities to handle complex survey designs (`svydesign` objects). It leverages the `{srvyr}` package to apply modern, "tidy" manipulation verbs (like `mutate`, `group_by`, and `across`) to survey data while automatically preserving sampling weights, stratification, and variance estimation parameters.
 
+## 🚀 What's New in Version 0.1.3
+
+This release addresses critical stability issues and metadata handling:
+
+*   **Object Assignment Logic:** Fixed a core logic error where results were being assigned to dynamic names inside the calculation block (violating RKWard standards). The plugin now uses internal hardcoded names, allowing RKWard to handle the final assignment to the user's chosen object safely.
+*   **Preview Generation:** Completely rewrote the preview engine. It now converts the `srvyr` object to a standard data frame *before* subsetting. This guarantees that the "50 rows limit" works correctly and prevents crashes when previewing complex design objects.
+*   **Label Preservation (Recode):** Fixed the metadata copying logic specifically for the **Batch Recode** component. Variable labels (`.rk.meta`) are now correctly transferred from the original variable to the new recoded variable within the `srvyr` object structure.
+
 ## 🚀 What's New in Version 0.1.2
-
-This release creates a stable foundation for production use by addressing critical logic errors:
-
-*   **Object Assignment Fix:** Resolved a "Golden Rule" violation where the plugin attempted to save results to dynamic variable names inside the calculation block. It now correctly uses hardcoded internal names, allowing RKWard to handle the final assignment to the user's chosen object safely.
-*   **Preview Stability:** Completely rewrote the preview generation logic. It now converts the `srvyr` object to a standard data frame *before* selecting columns, ensuring the "50 rows limit" works correctly and preventing errors when subsetting complex survey objects.
-*   **Label Preservation:** Enhanced the metadata handling to ensure RKWard variable labels are preserved even after complex transformations or recoding.
-
-## 🚀 What's New in Version 0.1.1
 
 *   **Robust Variable Handling:** Fixed syntax errors when variables contain spaces or special characters (e.g., `"Mucha confianza"`).
 *   **Recode Matrix:** The spreadsheet interface for recoding now correctly accepts mixed data types (text/numbers) without validation errors blocking the "Submit" button.
@@ -30,6 +30,7 @@ Apply functions to multiple variables within a design object simultaneously.
 
 ### 2. Survey Batch Recode
 A spreadsheet-like interface for recoding variables inside a design.
+*   **Metadata Awareness:** Automatically copies the RKWard variable label from the source variable to the new recoded variable, keeping your dataset documented.
 *   **Type Safety:** Options to strictly handle Numeric vs. Character conversions to prevent R errors.
 *   **Default Handling:** Flexible "Else" logic (Copy original, NA, or Specific Value).
 *   **Smart Preview:** Displays only the original and the new variable side-by-side for verification.

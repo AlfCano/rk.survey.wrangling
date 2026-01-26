@@ -5,11 +5,12 @@ function preview(){
 	
     function getCol(id) {
         var raw = getValue(id);
-        if (!raw) return []; 
+        if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
+            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
-                var last = parts[parts.length - 1]; 
+                var last = parts[parts.length - 1];
                 return last.split('"]]')[0];
             } else if (item.indexOf("$") > -1) {
                 return item.substring(item.lastIndexOf("$") + 1);
@@ -17,7 +18,7 @@ function preview(){
             return item;
         });
     }
-    
+
     function getDesignName(raw_vars_string) {
         if (!raw_vars_string) return "";
         var first_var = raw_vars_string.split("\n")[0];
@@ -27,10 +28,10 @@ function preview(){
             return first_var.substring(0, first_var.indexOf("[["));
         } else if (first_var.indexOf("$") > -1) {
             return first_var.split("$")[0];
-        } 
+        }
         return first_var;
     }
-    
+
     // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
@@ -47,8 +48,8 @@ function preview(){
       if (vars.length === 0) return;
       var raw_vars = getValue("vars_rc");
       var design_name = getDesignName(raw_vars);
-      
-      // Get raw list for label copying source paths
+
+      // FIX: Get full raw list to extract sources for label copying
       var raw_var_list = raw_vars.split("\n").filter(function(n){ return n != "" });
 
       
@@ -69,18 +70,18 @@ function preview(){
       for (var i = 0; i < olds.length; i++) {
           var lhs = String(olds[i]).trim(); var rhs = String(news[i]).trim();
           if (lhs === "" || rhs === "") continue;
-          
+
           var force_quote = lhs.indexOf(" ") > -1;
-          if (in_type == "character" || force_quote) { 
-             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\""; 
+          if (in_type == "character" || force_quote) {
+             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\"";
           }
-          if (out_type == "character") { 
-             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\""; 
+          if (out_type == "character") {
+             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\"";
           }
           args.push(lhs + " ~ " + rhs);
       }
 
-      if (else_mode == "copy") { 
+      if (else_mode == "copy") {
           if (in_type == out_type) { args.push(".default = ."); }
           else {
              if (out_type == "character") args.push(".default = as.character(.)");
@@ -96,19 +97,25 @@ function preview(){
 
       var match_args = args.join(", ");
       var name_arg = (suffix == "") ? "" : ", .names = \"{.col}" + suffix + "\"";
-      var func_call = "dplyr::case_match(., " + match_args + ")";
+
+      // FIX: Check for Input Type. If Character, wrap input in as.character(.)
+      var input_wrapper = ".";
+      if (in_type == "character") {
+          input_wrapper = "as.character(.)";
+      }
+
+      var func_call = "dplyr::case_match(" + input_wrapper + ", " + match_args + ")";
       if (as_fac == "1") { func_call = "as.factor(" + func_call + ")"; }
-      
+
       var quoted_vars = vars.map(function(v) { return "'" + v + "'"; }).join(", ");
 
       echo("require(srvyr)\n");
       echo("require(dplyr)\n");
-      
+
       
       // PREVIEW MODE
-      // Calc on head(50) -> convert to DF -> Select
       echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50) %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\n");
-      // Fix: Convert srvyr obj to dataframe before selection to handle columns correctly
+      // Fix: as.data.frame() instead of $variables
       echo("preview_data <- prev_svy %>% as.data.frame() %>% dplyr::select(dplyr::all_of(c('" + vars[0] + "')), dplyr::contains('" + suffix + "'))\n");
         
 }
@@ -138,11 +145,12 @@ function calculate(is_preview){
 
     function getCol(id) {
         var raw = getValue(id);
-        if (!raw) return []; 
+        if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
+            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
-                var last = parts[parts.length - 1]; 
+                var last = parts[parts.length - 1];
                 return last.split('"]]')[0];
             } else if (item.indexOf("$") > -1) {
                 return item.substring(item.lastIndexOf("$") + 1);
@@ -150,7 +158,7 @@ function calculate(is_preview){
             return item;
         });
     }
-    
+
     function getDesignName(raw_vars_string) {
         if (!raw_vars_string) return "";
         var first_var = raw_vars_string.split("\n")[0];
@@ -160,10 +168,10 @@ function calculate(is_preview){
             return first_var.substring(0, first_var.indexOf("[["));
         } else if (first_var.indexOf("$") > -1) {
             return first_var.split("$")[0];
-        } 
+        }
         return first_var;
     }
-    
+
     // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
@@ -180,8 +188,8 @@ function calculate(is_preview){
       if (vars.length === 0) return;
       var raw_vars = getValue("vars_rc");
       var design_name = getDesignName(raw_vars);
-      
-      // Get raw list for label copying source paths
+
+      // FIX: Get full raw list to extract sources for label copying
       var raw_var_list = raw_vars.split("\n").filter(function(n){ return n != "" });
 
       
@@ -200,18 +208,18 @@ function calculate(is_preview){
       for (var i = 0; i < olds.length; i++) {
           var lhs = String(olds[i]).trim(); var rhs = String(news[i]).trim();
           if (lhs === "" || rhs === "") continue;
-          
+
           var force_quote = lhs.indexOf(" ") > -1;
-          if (in_type == "character" || force_quote) { 
-             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\""; 
+          if (in_type == "character" || force_quote) {
+             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\"";
           }
-          if (out_type == "character") { 
-             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\""; 
+          if (out_type == "character") {
+             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\"";
           }
           args.push(lhs + " ~ " + rhs);
       }
 
-      if (else_mode == "copy") { 
+      if (else_mode == "copy") {
           if (in_type == out_type) { args.push(".default = ."); }
           else {
              if (out_type == "character") args.push(".default = as.character(.)");
@@ -227,30 +235,37 @@ function calculate(is_preview){
 
       var match_args = args.join(", ");
       var name_arg = (suffix == "") ? "" : ", .names = \"{.col}" + suffix + "\"";
-      var func_call = "dplyr::case_match(., " + match_args + ")";
+
+      // FIX: Check for Input Type. If Character, wrap input in as.character(.)
+      var input_wrapper = ".";
+      if (in_type == "character") {
+          input_wrapper = "as.character(.)";
+      }
+
+      var func_call = "dplyr::case_match(" + input_wrapper + ", " + match_args + ")";
       if (as_fac == "1") { func_call = "as.factor(" + func_call + ")"; }
-      
+
       var quoted_vars = vars.map(function(v) { return "'" + v + "'"; }).join(", ");
 
       echo("require(srvyr)\n");
       echo("require(dplyr)\n");
-      
+
       
       // MAIN MODE
-      // FIXED: Hardcoded "design_rec"
+      // GOLDEN RULE 7 FIX: Hardcoded "design_rec" (matches initial="design_rec")
       echo("design_rec <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\n");
-      
+
       // Restore general labels
       echo(genLabelRestoreCode(design_name, "design_rec"));
 
-      // Copy label to NEW variables
+      // Explicitly copy labels for NEW recoded variables
       echo("\n# Copy variable labels to the new recoded variables\n");
       for (var i = 0; i < vars.length; i++) {
           var old_v = vars[i];
-          var new_v = old_v + suffix; 
-          var source_path = raw_var_list[i]; 
-          // Use design_rec$variables[[new_v]] 
-          echo("try(attr(design_rec$variables[['" + new_v + "']], '.rk.meta') <- attr(" + source_path + ", '.rk.meta'), silent=TRUE)\n");
+          var new_v = old_v + suffix;
+          var source_path = raw_var_list[i];
+          // FIX: Access srvyr object like a dataframe
+          echo("try(attr(design_rec[['" + new_v + "']], '.rk.meta') <- attr(" + source_path + ", '.rk.meta'), silent=TRUE)\n");
       }
         
 }

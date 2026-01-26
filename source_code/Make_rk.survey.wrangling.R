@@ -6,7 +6,7 @@ local({
   rkwarddev.required("0.08-1")
 
   plugin_name <- "rk.survey.wrangling"
-  plugin_ver <- "0.1.1"
+  plugin_ver <- "0.1.3"
 
   package_about <- rk.XML.about(
     name = plugin_name,
@@ -33,6 +33,7 @@ local({
         var raw = getValue(id);
         if (!raw) return [];
         return raw.split("\\n").filter(function(n){ return n != "" }).map(function(item) {
+            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split(\'[[\"\');
                 var last = parts[parts.length - 1];
@@ -55,6 +56,18 @@ local({
             return first_var.split("$")[0];
         }
         return first_var;
+    }
+
+    // Helper to generate Label Copying code for survey objects
+    function genLabelRestoreCode(source_obj, target_obj) {
+        var code = "";
+        code += "## Restore variable labels\\n";
+        code += "for(col_name in names(" + target_obj + "$variables)) {\\n";
+        code += "  try({\\n";
+        code += "    attr(" + target_obj + "$variables[[col_name]], \'.rk.meta\') <- attr(" + source_obj + "$variables[[col_name]], \'.rk.meta\')\\n";
+        code += "  }, silent=TRUE)\\n";
+        code += "}\\n";
+        return code;
     }
   '
 
@@ -94,7 +107,10 @@ local({
   svy_tr_preview_note <- rk.XML.text("<i>Note: Preview limited to the first selected variable and 50 rows.</i>")
 
   svy_tr_dialog <- rk.XML.dialog(label = "Survey Batch Transform", child = rk.XML.tabbook(tabs = list(
-      "Variable Selection" = rk.XML.row(rk.XML.col(svy_tr_selector), rk.XML.col(svy_tr_vars, rk.XML.stretch(), rk.XML.frame(svy_tr_group, label = "Grouped Calculation"))),
+      "Variable Selection" = rk.XML.row(
+          rk.XML.col(svy_tr_selector),
+          rk.XML.col(svy_tr_vars, rk.XML.stretch(), rk.XML.frame(svy_tr_group, label = "Grouped Calculation"))
+      ),
       "Transformation" = rk.XML.col(svy_tr_func_drop, svy_tr_narm, svy_tr_cust_input, rk.XML.stretch()),
       "Output Options" = rk.XML.col(svy_tr_naming, svy_tr_help_label, rk.XML.stretch(), svy_tr_preview, svy_tr_preview_note, svy_tr_save)
   )))
@@ -110,7 +126,6 @@ local({
       var func_cust = getValue("func_cust");
       var use_na_rm = getValue("tr_narm_cbox") == "1";
       var naming = getValue("names_tr");
-      var save_name = getValue("save_tr");
       var groups = getCol("vars_group_tr");
 
       var group_start = "";
@@ -132,35 +147,41 @@ local({
       }
       var name_arg = (naming == "") ? "" : ", .names = \\"" + naming + "\\"";
 
-      ', if(is_preview) '
+      ', if(is_preview) {
+        '
       // PREVIEW MODE
       vars = vars.slice(0, 1); // Limit to 1 var
-      var quoted_vars = vars.map(function(v) { return "\\"" + v + "\\""; }).join(", ");
+      var quoted_vars = vars.map(function(v) { return "\'" + v + "\'"; }).join(", ");
 
       echo("require(srvyr)\\n");
       echo("require(dplyr)\\n");
-      // Calculate, then convert to dataframe, THEN head(50).
-      // Converting to DF first ensures we lose the complex survey list structure which confuses the previewer.
-      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey()" + group_start + " %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), " + fn_call + name_arg + "))" + group_end + "\\n");
-      echo("preview_data <- prev_svy$variables %>% as.data.frame() %>% head(50)\\n");
-      ' else '
+
+      // Calculate on survey, convert to DF, then select columns
+      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50)" + group_start + " %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), " + fn_call + name_arg + "))" + group_end + "\\n");
+      // Fix: Direct conversion to dataframe
+      echo("preview_data <- prev_svy %>% as.data.frame()\\n");
+        '
+      } else {
+        '
       // MAIN MODE
-      var quoted_vars = vars.map(function(v) { return "\\"" + v + "\\""; }).join(", ");
+      var quoted_vars = vars.map(function(v) { return "\'" + v + "\'"; }).join(", ");
       echo("require(srvyr)\\n");
+      // GOLDEN RULE 7 FIX: Hardcoded "design_tr" (matches initial)
       echo("design_tr <- " + design_name + " %>% srvyr::as_survey()" + group_start + " %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), " + fn_call + name_arg + "))" + group_end + "\\n");
 
-      // Copy labels for Transform as well
-      echo("\\n# Copy variable labels\\n");
-      for (var i = 0; i < vars.length; i++) {
-          var old_v = vars[i];
-          // We assume default naming for label copying if custom naming is used it is hard to predict
-          // But if naming is default:
-          echo("try(attr(" + save_name + "[[\'variables\']][[\'" + old_v + "\']], \'.rk.meta\') <- attr(" + design_name + "[[\'variables\']][[\'" + old_v + "\']], \'.rk.meta\'), silent=TRUE)\\n");
+      // Restore labels
+      echo(genLabelRestoreCode(design_name, "design_tr"));
+        '
       }
-      '
     )
   }
-  js_print_svy_tr <- 'if(getValue("save_tr.active")) { echo("rk.header(\\"Survey Batch Transform: " + getValue("save_tr") + "\\", level=3, toc=FALSE)\\n"); }'
+
+  js_print_svy_tr <- '
+    if(getValue("save_tr.active")) {
+      var save_name = getValue("save_tr").replace(/"/g, "\\\\\\"");
+      echo("rk.header(\\"Survey Batch Transform: " + save_name + "\\", level=3, toc=FALSE)\\n");
+    }
+  '
 
   # =========================================================================================
   # 4. Component B: Survey Batch Recode
@@ -198,6 +219,9 @@ local({
       if (vars.length === 0) return;
       var raw_vars = getValue("vars_rc");
       var design_name = getDesignName(raw_vars);
+
+      // FIX: Get full raw list to extract sources for label copying
+      var raw_var_list = raw_vars.split("\\n").filter(function(n){ return n != "" });
 
       ', if(is_preview) '
       vars = vars.slice(0, 1);
@@ -244,33 +268,57 @@ local({
 
       var match_args = args.join(", ");
       var name_arg = (suffix == "") ? "" : ", .names = \\"{.col}" + suffix + "\\"";
-      var func_call = "dplyr::case_match(., " + match_args + ")";
+
+      // FIX: Check for Input Type. If Character, wrap input in as.character(.)
+      var input_wrapper = ".";
+      if (in_type == "character") {
+          input_wrapper = "as.character(.)";
+      }
+
+      var func_call = "dplyr::case_match(" + input_wrapper + ", " + match_args + ")";
       if (as_fac == "1") { func_call = "as.factor(" + func_call + ")"; }
 
-      var quoted_vars = vars.map(function(v) { return "\\"" + v + "\\""; }).join(", ");
+      var quoted_vars = vars.map(function(v) { return "\'" + v + "\'"; }).join(", ");
 
       echo("require(srvyr)\\n");
       echo("require(dplyr)\\n");
 
-      ', if(is_preview) '
+      ', if(is_preview) {
+        '
       // PREVIEW MODE
-      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\\n");
-      // Explicitly select Original and New columns, convert to dataframe, then HEAD
-      echo("preview_data <- prev_svy$variables %>% dplyr::select(dplyr::all_of(c(\'" + vars[0] + "\')), dplyr::contains(\'" + suffix + "\')) %>% as.data.frame() %>% head(50)\\n");
-      ' else '
+      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50) %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\\n");
+      // Fix: as.data.frame() instead of $variables
+      echo("preview_data <- prev_svy %>% as.data.frame() %>% dplyr::select(dplyr::all_of(c(\'" + vars[0] + "\')), dplyr::contains(\'" + suffix + "\'))\\n");
+        '
+      } else {
+        '
       // MAIN MODE
+      // GOLDEN RULE 7 FIX: Hardcoded "design_rec" (matches initial="design_rec")
       echo("design_rec <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\\n");
 
+      // Restore general labels
+      echo(genLabelRestoreCode(design_name, "design_rec"));
+
+      // Explicitly copy labels for NEW recoded variables
       echo("\\n# Copy variable labels to the new recoded variables\\n");
       for (var i = 0; i < vars.length; i++) {
           var old_v = vars[i];
           var new_v = old_v + suffix;
-          echo("try(attr(" + save_name + "[[\'variables\']][[\'" + new_v + "\']], \'.rk.meta\') <- attr(" + design_name + "[[\'variables\']][[\'" + old_v + "\']], \'.rk.meta\'), silent=TRUE)\\n");
+          var source_path = raw_var_list[i];
+          // FIX: Access srvyr object like a dataframe
+          echo("try(attr(design_rec[[\'" + new_v + "\']], \'.rk.meta\') <- attr(" + source_path + ", \'.rk.meta\'), silent=TRUE)\\n");
       }
-      ', '
-    ')
+        '
+      }
+    )
   }
-  js_print_svy_rc <- 'if(getValue("save_rc.active")) { echo("rk.header(\\"Survey Batch Recode: " + getValue("save_rc") + "\\", level=3, toc=FALSE)\\n"); }'
+
+  js_print_svy_rc <- '
+    if(getValue("save_rc.active")) {
+      var save_name = getValue("save_rc").replace(/"/g, "\\\\\\"");
+      echo("rk.header(\\"Survey Batch Recode: " + save_name + "\\", level=3, toc=FALSE)\\n");
+    }
+  '
 
   # =========================================================================================
   # 5. Component C: Survey Composite Score
@@ -308,7 +356,7 @@ local({
       var na_arg = use_na ? "TRUE" : "FALSE";
       var save_name = getValue("save_cp");
 
-      var quoted_vars = vars.map(function(v) { return "\\"" + v + "\\""; }).join(", ");
+      var quoted_vars = vars.map(function(v) { return "\'" + v + "\'"; }).join(", ");
       var vars_str = "dplyr::pick(c(" + quoted_vars + "))";
       var calc_code = "";
 
@@ -324,18 +372,33 @@ local({
       echo("require(srvyr)\\n");
       echo("require(dplyr)\\n");
 
-      ', if(is_preview) '
+      ', if(is_preview) {
+        '
       // PREVIEW MODE
-      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(" + newname + " = " + calc_code + ")\\n");
-      // Extract only selected columns + new column, then head
-      echo("preview_data <- prev_svy$variables %>% dplyr::select(dplyr::all_of(c(" + quoted_vars + ")), dplyr::all_of(c(\"" + newname + "\"))) %>% as.data.frame() %>% head(50)\\n");
-      ' else '
+      echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50) %>% dplyr::mutate(" + newname + " = " + calc_code + ")\\n");
+      // Fix: as.data.frame()
+      echo("preview_data <- prev_svy %>% as.data.frame() %>% dplyr::select(dplyr::all_of(c(" + quoted_vars + ")), dplyr::all_of(c(\'" + newname + "\')))\\n");
+        '
+      } else {
+        '
       // MAIN MODE
+      // GOLDEN RULE 7 FIX: Hardcoded "design_score" (matches initial="design_score")
       echo("design_score <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(" + newname + " = " + calc_code + ")\\n");
-      ', '
-    ')
+
+      // Restore labels
+      echo(genLabelRestoreCode(design_name, "design_score"));
+        '
+      }
+    )
   }
-  js_print_svy_cp <- 'if(getValue("save_cp.active")) { echo("rk.header(\\"Survey Composite Score Created: " + getValue("name_cp") + "\\", level=3, toc=FALSE)\\n"); }'
+
+  # FIX: Escaped quotes in save name
+  js_print_svy_cp <- '
+    if(getValue("save_cp.active")) {
+      var save_name = getValue("save_cp").replace(/"/g, "\\\\\\"");
+      echo("rk.header(\\"Survey Composite Score Created: " + save_name + "\\", level=3, toc=FALSE)\\n");
+    }
+  '
 
   # =========================================================================================
   # 6. Final Skeleton Generation
@@ -357,5 +420,5 @@ local({
     load = TRUE, overwrite = TRUE, show = FALSE
   )
 
-  cat("\nPlugin 'rk.survey.wrangling' (v0.1.1 generated successfully.\n")
+  cat("\nPlugin 'rk.survey.wrangling' (v0.1.3) generated successfully.\n")
 })
