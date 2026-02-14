@@ -1,23 +1,23 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.survey.wrangling 0.1.0\n"
+"Project-Id-Version: rk.survey.wrangling 0.1.4\n"
 "Report-Msgid-Bugs-To: https://mail.kde.org/mailman/listinfo/kde-i18n-doc\n"
-"POT-Creation-Date: 2026-01-08 12:00+0000\n"
-"PO-Revision-Date: 2026-01-08 12:00+0000\n"
-"Last-Translator: Your Name <your.email@example.com>\n"
-"Language-Team: German <kde-i18n-de@kde.org>\n"
+"POT-Creation-Date: 2026-02-13 12:00+0000\n"
+"PO-Revision-Date: 2026-02-13 12:00+0000\n"
+"Last-Translator: Alfonso Cano Robles <alfonso.cano@correo.buap.mx>\n"
+"Language-Team: German <kde-i18n-doc@kde.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: RKWard Plugin Generator\n"
 
 msgid "A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
-msgstr "Eine Suite von Plugins zur Manipulation komplexer Erhebungsobjekte mit 'srvyr' und 'survey'. Enthält Stapeltransformationen, Umkodierung und Scoring innerhalb von Erhebungsdesigns."
+msgstr "Eine Sammlung von Plugins zur Manipulation komplexer Umfrageobjekte mit 'srvyr' und 'survey'. Umfasst Stapeltransformationen, Umcodierung und Scoring innerhalb von Umfragedesigns."
 
 msgid "Survey Batch Transform"
-msgstr "Erhebungs-Stapeltransformation"
+msgstr "Umfrage Stapel-Transformation"
 
 msgid "Variables to transform"
 msgstr "Zu transformierende Variablen"
@@ -49,17 +49,38 @@ msgstr "Absolut (abs)"
 msgid "Standardize (scale)"
 msgstr "Standardisieren (scale)"
 
+msgid "Mean (mean)"
+msgstr "Mittelwert (mean)"
+
+msgid "Sum (sum)"
+msgstr "Summe (sum)"
+
+msgid "Standard Deviation (sd)"
+msgstr "Standardabweichung (sd)"
+
+msgid "Variance (var)"
+msgstr "Varianz (var)"
+
+msgid "Minimum (min)"
+msgstr "Minimum (min)"
+
+msgid "Maximum (max)"
+msgstr "Maximum (max)"
+
 msgid "Convert to Numeric"
-msgstr "In Numerisch konvertieren"
+msgstr "In Numerisch umwandeln"
 
 msgid "Convert to Factor"
-msgstr "In Faktor konvertieren"
+msgstr "In Faktor umwandeln"
 
 msgid "Custom..."
 msgstr "Benutzerdefiniert..."
 
 msgid "Ignore NAs (na.rm = TRUE)"
 msgstr "NAs ignorieren (na.rm = TRUE)"
+
+msgid "Treat Zeros as NA (e.g. for log)"
+msgstr "Nullen als NA behandeln (z.B. für log)"
 
 msgid "Custom function (e.g., function(x) x^2)"
 msgstr "Benutzerdefinierte Funktion (z.B. function(x) x^2)"
@@ -68,7 +89,7 @@ msgid "Naming pattern (glue syntax)"
 msgstr "Benennungsmuster (glue-Syntax)"
 
 msgid "Use <b>{.col}</b> for original name and <b>{.fn}</b> for function name.<br>Leave empty to overwrite original variables."
-msgstr "Verwenden Sie <b>{.col}</b> für den ursprünglichen Namen und <b>{.fn}</b> für den Funktionsnamen.<br>Leer lassen, um ursprüngliche Variablen zu überschreiben."
+msgstr "Verwenden Sie <b>{.col}</b> für den ursprünglichen Namen und <b>{.fn}</b> für den Funktionsnamen.<br>Leer lassen, um die ursprünglichen Variablen zu überschreiben."
 
 msgid "Save to (overwrite or new object)"
 msgstr "Speichern unter (überschreiben oder neues Objekt)"
@@ -89,16 +110,16 @@ msgid "Output Options"
 msgstr "Ausgabeoptionen"
 
 msgid "Survey Batch Transform: "
-msgstr "Erhebungs-Stapeltransformation: "
+msgstr "Umfrage Stapel-Transformation: "
 
 msgid "Apply a function to multiple variables within a survey design object using srvyr."
-msgstr "Wenden Sie eine Funktion auf mehrere Variablen innerhalb eines Erhebungsdesign-Objekts mit srvyr an."
+msgstr "Wenden Sie eine Funktion auf mehrere Variablen innerhalb eines Umfragedesign-Objekts mit srvyr an."
 
 msgid "Survey Batch Recode"
-msgstr "Erhebungs-Stapelumkodierung"
+msgstr "Umfrage Stapel-Umcodierung"
 
 msgid "Variables to recode"
-msgstr "Umzukodierende Variablen"
+msgstr "Umzucodierende Variablen"
 
 msgid "Mapping Rules"
 msgstr "Zuordnungsregeln"
@@ -137,25 +158,25 @@ msgid "Suffix"
 msgstr "Suffix"
 
 msgid "Convert output to factor"
-msgstr "Ausgabe in Faktor konvertieren"
+msgstr "Ausgabe in Faktor umwandeln"
 
 msgid "Save result object"
 msgstr "Ergebnisobjekt speichern"
 
 msgid "Recode Rules"
-msgstr "Umkodierungsregeln"
+msgstr "Umcodierungsregeln"
 
 msgid "Survey Batch Recode: "
-msgstr "Erhebungs-Stapelumkodierung: "
+msgstr "Umfrage Stapel-Umcodierung: "
 
 msgid "Recode multiple variables within a survey design object using srvyr."
-msgstr "Mehrere Variablen innerhalb eines Erhebungsdesign-Objekts mit srvyr umkodieren."
+msgstr "Mehrere Variablen innerhalb eines Umfragedesign-Objekts mit srvyr umcodieren."
 
 msgid "Survey Composite Score"
-msgstr "Erhebungs-Zusammengesetzter Score"
+msgstr "Umfrage Gesamtscore"
 
 msgid "Items to aggregate"
-msgstr "Zu aggregierende Elemente"
+msgstr "Zu aggregierende Items"
 
 msgid "Aggregation Method"
 msgstr "Aggregationsmethode"
@@ -197,7 +218,7 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 msgid "Survey Composite Score Created: "
-msgstr "Erhebungs-Zusammengesetzter Score erstellt: "
+msgstr "Umfrage Gesamtscore erstellt: "
 
 msgid "Calculate row-wise scores (Mean/Sum) within a survey design object."
-msgstr "Berechnen Sie zeilenweise Scores (Mittelwert/Summe) innerhalb eines Erhebungsdesign-Objekts."
+msgstr "Berechnen Sie zeilenweise Scores (Mittelwert/Summe) innerhalb eines Umfragedesign-Objekts."

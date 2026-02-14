@@ -1,20 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.survey.wrangling 0.1.0\n"
+"Project-Id-Version: rk.survey.wrangling 0.1.4\n"
 "Report-Msgid-Bugs-To: https://mail.kde.org/mailman/listinfo/kde-i18n-doc\n"
-"POT-Creation-Date: 2026-01-08 12:00+0000\n"
-"PO-Revision-Date: 2026-01-08 12:00+0000\n"
-"Last-Translator: Your Name <your.email@example.com>\n"
-"Language-Team: French <kde-francophone@kde.org>\n"
+"POT-Creation-Date: 2026-02-13 12:00+0000\n"
+"PO-Revision-Date: 2026-02-13 12:00+0000\n"
+"Last-Translator: Alfonso Cano Robles <alfonso.cano@correo.buap.mx>\n"
+"Language-Team: French <kde-i18n-doc@kde.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: RKWard Plugin Generator\n"
 
 msgid "A suite of plugins for manipulating complex survey objects using 'srvyr' and 'survey'. Includes batch transformations, recoding, and scoring within survey designs."
-msgstr "Une suite de plugins pour manipuler des objets d'enquête complexes avec 'srvyr' et 'survey'. Inclut les transformations par lots, le recodage et les scores dans les plans d'enquête."
+msgstr "Une suite de plugins pour manipuler des objets d'enquête complexes avec 'srvyr' et 'survey'. Inclut des transformations par lots, le recodage et le calcul de scores dans les plans d'enquête."
 
 msgid "Survey Batch Transform"
 msgstr "Transformation par Lots d'Enquête"
@@ -38,16 +38,34 @@ msgid "Log10 (log10)"
 msgstr "Log10 (log10)"
 
 msgid "Exponential (exp)"
-msgstr "Exponentiel (exp)"
+msgstr "Exponentielle (exp)"
 
 msgid "Square Root (sqrt)"
-msgstr "Racine Carrée (sqrt)"
+msgstr "Racine carrée (sqrt)"
 
 msgid "Abs (abs)"
 msgstr "Absolu (abs)"
 
 msgid "Standardize (scale)"
 msgstr "Standardiser (scale)"
+
+msgid "Mean (mean)"
+msgstr "Moyenne (mean)"
+
+msgid "Sum (sum)"
+msgstr "Somme (sum)"
+
+msgid "Standard Deviation (sd)"
+msgstr "Écart-type (sd)"
+
+msgid "Variance (var)"
+msgstr "Variance (var)"
+
+msgid "Minimum (min)"
+msgstr "Minimum (min)"
+
+msgid "Maximum (max)"
+msgstr "Maximum (max)"
 
 msgid "Convert to Numeric"
 msgstr "Convertir en Numérique"
@@ -61,23 +79,26 @@ msgstr "Personnalisé..."
 msgid "Ignore NAs (na.rm = TRUE)"
 msgstr "Ignorer les NA (na.rm = TRUE)"
 
+msgid "Treat Zeros as NA (e.g. for log)"
+msgstr "Traiter les Zéros comme NA (ex. pour log)"
+
 msgid "Custom function (e.g., function(x) x^2)"
-msgstr "Fonction personnalisée (ex: function(x) x^2)"
+msgstr "Fonction personnalisée (ex. function(x) x^2)"
 
 msgid "Naming pattern (glue syntax)"
 msgstr "Modèle de nommage (syntaxe glue)"
 
 msgid "Use <b>{.col}</b> for original name and <b>{.fn}</b> for function name.<br>Leave empty to overwrite original variables."
-msgstr "Utilisez <b>{.col}</b> pour le nom original et <b>{.fn}</b> pour le nom de la fonction.<br>Laisser vide pour écraser les variables originales."
+msgstr "Utilisez <b>{.col}</b> pour le nom original et <b>{.fn}</b> pour le nom de la fonction.<br>Laissez vide pour écraser les variables originales."
 
 msgid "Save to (overwrite or new object)"
-msgstr "Enregistrer dans (écraser ou nouvel objet)"
+msgstr "Enregistrer sous (écraser ou nouvel objet)"
 
 msgid "Preview data"
-msgstr "Aperçu des données"
+msgstr "Prévisualiser les données"
 
 msgid "<i>Note: Preview limited to the first selected variable and 50 rows.</i>"
-msgstr "<i>Note : Aperçu limité à la première variable sélectionnée et 50 lignes.</i>"
+msgstr "<i>Note : Prévisualisation limitée à la première variable sélectionnée et 50 lignes.</i>"
 
 msgid "Variable Selection"
 msgstr "Sélection des Variables"
@@ -92,7 +113,7 @@ msgid "Survey Batch Transform: "
 msgstr "Transformation par Lots d'Enquête : "
 
 msgid "Apply a function to multiple variables within a survey design object using srvyr."
-msgstr "Appliquer une fonction à plusieurs variables dans un objet de plan d'enquête en utilisant srvyr."
+msgstr "Appliquer une fonction à plusieurs variables dans un objet de plan d'enquête avec srvyr."
 
 msgid "Survey Batch Recode"
 msgstr "Recodage par Lots d'Enquête"
@@ -101,7 +122,7 @@ msgid "Variables to recode"
 msgstr "Variables à recoder"
 
 msgid "Mapping Rules"
-msgstr "Règles de Mappage"
+msgstr "Règles de Correspondance"
 
 msgid "Input Data Type (Old Value)"
 msgstr "Type de Données d'Entrée (Ancienne Valeur)"
@@ -149,7 +170,7 @@ msgid "Survey Batch Recode: "
 msgstr "Recodage par Lots d'Enquête : "
 
 msgid "Recode multiple variables within a survey design object using srvyr."
-msgstr "Recoder plusieurs variables dans un objet de plan d'enquête en utilisant srvyr."
+msgstr "Recoder plusieurs variables dans un objet de plan d'enquête avec srvyr."
 
 msgid "Survey Composite Score"
 msgstr "Score Composite d'Enquête"
@@ -161,7 +182,7 @@ msgid "Aggregation Method"
 msgstr "Méthode d'Agrégation"
 
 msgid "Mean (Average)"
-msgstr "Moyenne"
+msgstr "Moyenne (Average)"
 
 msgid "Sum (Total)"
 msgstr "Somme (Total)"
@@ -182,7 +203,7 @@ msgid "Variance"
 msgstr "Variance"
 
 msgid "Count (N valid)"
-msgstr "Nombre (N valide)"
+msgstr "Décompte (N valides)"
 
 msgid "Remove NAs (na.rm = TRUE)"
 msgstr "Supprimer les NA (na.rm = TRUE)"

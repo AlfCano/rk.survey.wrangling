@@ -29,6 +29,8 @@
 		</setting>
 		<setting id="tr_narm_cbox">
 		</setting>
+		<setting id="tr_zeros_na_cbox">
+		</setting>
 		<setting id="func_cust">
 		</setting>
 		<caption id="tab_OtptOptn" />

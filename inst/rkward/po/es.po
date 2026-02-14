@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: rk.survey.wrangling 0.1.0\n"
+"Project-Id-Version: rk.survey.wrangling 0.1.4\n"
 "Report-Msgid-Bugs-To: https://mail.kde.org/mailman/listinfo/kde-i18n-doc\n"
-"POT-Creation-Date: 2026-01-08 12:00+0000\n"
-"PO-Revision-Date: 2026-01-08 12:00+0000\n"
+"POT-Creation-Date: 2026-02-13 12:00+0000\n"
+"PO-Revision-Date: 2026-02-13 12:00+0000\n"
 "Last-Translator: Alfonso Cano Robles <alfonso.cano@correo.buap.mx>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "Language: es\n"
@@ -49,6 +49,24 @@ msgstr "Absoluto (abs)"
 msgid "Standardize (scale)"
 msgstr "Estandarizar (scale)"
 
+msgid "Mean (mean)"
+msgstr "Media (mean)"
+
+msgid "Sum (sum)"
+msgstr "Suma (sum)"
+
+msgid "Standard Deviation (sd)"
+msgstr "Desviación Estándar (sd)"
+
+msgid "Variance (var)"
+msgstr "Varianza (var)"
+
+msgid "Minimum (min)"
+msgstr "Mínimo (min)"
+
+msgid "Maximum (max)"
+msgstr "Máximo (max)"
+
 msgid "Convert to Numeric"
 msgstr "Convertir a Numérico"
 
@@ -60,6 +78,9 @@ msgstr "Personalizado..."
 
 msgid "Ignore NAs (na.rm = TRUE)"
 msgstr "Ignorar NAs (na.rm = TRUE)"
+
+msgid "Treat Zeros as NA (e.g. for log)"
+msgstr "Tratar Ceros como NA (ej. para log)"
 
 msgid "Custom function (e.g., function(x) x^2)"
 msgstr "Función personalizada (ej. function(x) x^2)"

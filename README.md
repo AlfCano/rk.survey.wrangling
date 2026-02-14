@@ -1,30 +1,34 @@
 # rk.survey.wrangling: Tidy Manipulation of Complex Surveys
 
-![Version](https://img.shields.io/badge/Version-0.1.3-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.1.4-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml)
 
 **rk.survey.wrangling** extends RKWard's capabilities to handle complex survey designs (`svydesign` objects). It leverages the `{srvyr}` package to apply modern, "tidy" manipulation verbs (like `mutate`, `group_by`, and `across`) to survey data while automatically preserving sampling weights, stratification, and variance estimation parameters.
 
+## 🚀 What's New in Version 0.1.4
+
+This release significantly expands the transformation capabilities and fixes critical metadata bugs:
+
+*   **Expanded Transformation Library:** The **Batch Transform** component now includes summary statistics: **Mean, Sum, Standard Deviation, Variance, Minimum, and Maximum**. These work seamlessly with the "Grouping variable" option to create group-level statistics (e.g., assigning the regional mean income to every household in that region).
+*   **Advanced Zero Handling:** Added a **"Treat Zeros as NA"** checkbox. This is critical for mathematical operations like `log()` or `log10()`, preventing infinite values (`-Inf`) by converting zeros to `NA` on the fly (using `dplyr::na_if(., 0)`).
+*   **Smart Naming Fixes:** Adjusted the naming pattern logic (`{.col}_{.fn}`) to correctly identify function names even when complex logic (like zero-handling) is applied.
+*   **srvyr Structure Fix:** Fixed a bug in the label restoration loop where the plugin tried to access `$variables` (which exists in `survey` objects but not in `srvyr` tibbles). Metadata is now correctly preserved for all object types.
+
 ## 🚀 What's New in Version 0.1.3
 
-This release addresses critical stability issues and metadata handling:
-
-*   **Object Assignment Logic:** Fixed a core logic error where results were being assigned to dynamic names inside the calculation block (violating RKWard standards). The plugin now uses internal hardcoded names, allowing RKWard to handle the final assignment to the user's chosen object safely.
-*   **Preview Generation:** Completely rewrote the preview engine. It now converts the `srvyr` object to a standard data frame *before* subsetting. This guarantees that the "50 rows limit" works correctly and prevents crashes when previewing complex design objects.
-*   **Label Preservation (Recode):** Fixed the metadata copying logic specifically for the **Batch Recode** component. Variable labels (`.rk.meta`) are now correctly transferred from the original variable to the new recoded variable within the `srvyr` object structure.
-
-## 🚀 What's New in Version 0.1.2
-
-*   **Robust Variable Handling:** Fixed syntax errors when variables contain spaces or special characters (e.g., `"Mucha confianza"`).
-*   **Recode Matrix:** The spreadsheet interface for recoding now correctly accepts mixed data types (text/numbers) without validation errors blocking the "Submit" button.
+*   **Preview Generation:** Completely rewrote the preview engine. It now converts the `srvyr` object to a standard data frame *before* subsetting, preventing crashes when previewing complex designs.
+*   **Object Assignment Logic:** Fixed core logic to ensure results are assigned safely to the user's chosen object name in the Global Environment.
+*   **Label Preservation (Recode):** Fixed metadata copying specifically for the Batch Recode component.
 
 ## ✨ Features
 
 ### 1. Survey Batch Transform
 Apply functions to multiple variables within a design object simultaneously.
-*   **Vectorized Operations:** Log, Scale, Exponential, or custom functions applied to $N$ variables.
+*   **Vectorized Operations:** Log, Scale, Exponential, Abs, Sqrt.
+*   **Summary Statistics:** Mean, Sum, SD, Variance, Min, Max (New in v0.1.4).
+*   **Safety Features:** Options to "Ignore NAs" and "Treat Zeros as NA" (preventing math errors).
 *   **Grouped Calculation:** Calculate statistics relative to a group (e.g., centering income *within* a region) using implicit `group_by` -> `mutate` -> `ungroup`.
 *   **Smart Naming:** Rename variables automatically using glue syntax (`{.col}_{.fn}`).
 
@@ -37,7 +41,7 @@ A spreadsheet-like interface for recoding variables inside a design.
 
 ### 3. Survey Composite Score
 Calculate new variables based on row-wise aggregation of items.
-*   **Methods:** Mean, Sum, Median, SD, Min/Max.
+*   **Methods:** Mean, Sum, Median, SD, Min/Max, Count (N valid).
 *   **Context:** Unlike standard data frames, this adds the new score directly into the survey design object, ready for weighted regression or tabulation.
 
 ### 🌍 Internationalization

@@ -7,7 +7,6 @@ function preview(){
         var raw = getValue(id);
         if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
-            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
                 var last = parts[parts.length - 1];
@@ -32,13 +31,15 @@ function preview(){
         return first_var;
     }
 
-    // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
         code += "## Restore variable labels\n";
-        code += "for(col_name in names(" + target_obj + "$variables)) {\n";
+        code += "source_vars <- if('variables' %in% names(" + source_obj + ")) " + source_obj + "$variables else " + source_obj + "\n";
+        code += "for(col_name in names(" + target_obj + ")) {\n";
         code += "  try({\n";
-        code += "    attr(" + target_obj + "$variables[[col_name]], '.rk.meta') <- attr(" + source_obj + "$variables[[col_name]], '.rk.meta')\n";
+        code += "    if(col_name %in% names(source_vars)) {\n";
+        code += "      attr(" + target_obj + "[[col_name]], '.rk.meta') <- attr(source_vars[[col_name]], '.rk.meta')\n";
+        code += "    }\n";
         code += "  }, silent=TRUE)\n";
         code += "}\n";
         return code;
@@ -74,7 +75,6 @@ function preview(){
       
       // PREVIEW MODE
       echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50) %>% dplyr::mutate(" + newname + " = " + calc_code + ")\n");
-      // Fix: as.data.frame()
       echo("preview_data <- prev_svy %>% as.data.frame() %>% dplyr::select(dplyr::all_of(c(" + quoted_vars + ")), dplyr::all_of(c('" + newname + "')))\n");
         
 }
@@ -106,7 +106,6 @@ function calculate(is_preview){
         var raw = getValue(id);
         if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
-            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
                 var last = parts[parts.length - 1];
@@ -131,13 +130,15 @@ function calculate(is_preview){
         return first_var;
     }
 
-    // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
         code += "## Restore variable labels\n";
-        code += "for(col_name in names(" + target_obj + "$variables)) {\n";
+        code += "source_vars <- if('variables' %in% names(" + source_obj + ")) " + source_obj + "$variables else " + source_obj + "\n";
+        code += "for(col_name in names(" + target_obj + ")) {\n";
         code += "  try({\n";
-        code += "    attr(" + target_obj + "$variables[[col_name]], '.rk.meta') <- attr(" + source_obj + "$variables[[col_name]], '.rk.meta')\n";
+        code += "    if(col_name %in% names(source_vars)) {\n";
+        code += "      attr(" + target_obj + "[[col_name]], '.rk.meta') <- attr(source_vars[[col_name]], '.rk.meta')\n";
+        code += "    }\n";
         code += "  }, silent=TRUE)\n";
         code += "}\n";
         return code;
@@ -172,10 +173,8 @@ function calculate(is_preview){
 
       
       // MAIN MODE
-      // GOLDEN RULE 7 FIX: Hardcoded "design_score" (matches initial="design_score")
       echo("design_score <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(" + newname + " = " + calc_code + ")\n");
 
-      // Restore labels
       echo(genLabelRestoreCode(design_name, "design_score"));
         
 }

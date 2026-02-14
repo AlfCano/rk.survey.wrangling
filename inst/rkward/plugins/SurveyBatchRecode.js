@@ -7,7 +7,6 @@ function preview(){
         var raw = getValue(id);
         if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
-            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
                 var last = parts[parts.length - 1];
@@ -32,13 +31,15 @@ function preview(){
         return first_var;
     }
 
-    // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
         code += "## Restore variable labels\n";
-        code += "for(col_name in names(" + target_obj + "$variables)) {\n";
+        code += "source_vars <- if('variables' %in% names(" + source_obj + ")) " + source_obj + "$variables else " + source_obj + "\n";
+        code += "for(col_name in names(" + target_obj + ")) {\n";
         code += "  try({\n";
-        code += "    attr(" + target_obj + "$variables[[col_name]], '.rk.meta') <- attr(" + source_obj + "$variables[[col_name]], '.rk.meta')\n";
+        code += "    if(col_name %in% names(source_vars)) {\n";
+        code += "      attr(" + target_obj + "[[col_name]], '.rk.meta') <- attr(source_vars[[col_name]], '.rk.meta')\n";
+        code += "    }\n";
         code += "  }, silent=TRUE)\n";
         code += "}\n";
         return code;
@@ -49,7 +50,6 @@ function preview(){
       var raw_vars = getValue("vars_rc");
       var design_name = getDesignName(raw_vars);
 
-      // FIX: Get full raw list to extract sources for label copying
       var raw_var_list = raw_vars.split("\n").filter(function(n){ return n != "" });
 
       
@@ -97,14 +97,7 @@ function preview(){
 
       var match_args = args.join(", ");
       var name_arg = (suffix == "") ? "" : ", .names = \"{.col}" + suffix + "\"";
-
-      // FIX: Check for Input Type. If Character, wrap input in as.character(.)
-      var input_wrapper = ".";
-      if (in_type == "character") {
-          input_wrapper = "as.character(.)";
-      }
-
-      var func_call = "dplyr::case_match(" + input_wrapper + ", " + match_args + ")";
+      var func_call = "dplyr::case_match(., " + match_args + ")";
       if (as_fac == "1") { func_call = "as.factor(" + func_call + ")"; }
 
       var quoted_vars = vars.map(function(v) { return "'" + v + "'"; }).join(", ");
@@ -115,7 +108,6 @@ function preview(){
       
       // PREVIEW MODE
       echo("prev_svy <- " + design_name + " %>% srvyr::as_survey() %>% head(50) %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\n");
-      // Fix: as.data.frame() instead of $variables
       echo("preview_data <- prev_svy %>% as.data.frame() %>% dplyr::select(dplyr::all_of(c('" + vars[0] + "')), dplyr::contains('" + suffix + "'))\n");
         
 }
@@ -147,7 +139,6 @@ function calculate(is_preview){
         var raw = getValue(id);
         if (!raw) return [];
         return raw.split("\n").filter(function(n){ return n != "" }).map(function(item) {
-            // Fix: Handle nested brackets like obj[["variables"]][["TARGET_COL"]]
             if (item.indexOf("[[") > -1) {
                 var parts = item.split('[["');
                 var last = parts[parts.length - 1];
@@ -172,13 +163,15 @@ function calculate(is_preview){
         return first_var;
     }
 
-    // Helper to generate Label Copying code for survey objects
     function genLabelRestoreCode(source_obj, target_obj) {
         var code = "";
         code += "## Restore variable labels\n";
-        code += "for(col_name in names(" + target_obj + "$variables)) {\n";
+        code += "source_vars <- if('variables' %in% names(" + source_obj + ")) " + source_obj + "$variables else " + source_obj + "\n";
+        code += "for(col_name in names(" + target_obj + ")) {\n";
         code += "  try({\n";
-        code += "    attr(" + target_obj + "$variables[[col_name]], '.rk.meta') <- attr(" + source_obj + "$variables[[col_name]], '.rk.meta')\n";
+        code += "    if(col_name %in% names(source_vars)) {\n";
+        code += "      attr(" + target_obj + "[[col_name]], '.rk.meta') <- attr(source_vars[[col_name]], '.rk.meta')\n";
+        code += "    }\n";
         code += "  }, silent=TRUE)\n";
         code += "}\n";
         return code;
@@ -189,7 +182,6 @@ function calculate(is_preview){
       var raw_vars = getValue("vars_rc");
       var design_name = getDesignName(raw_vars);
 
-      // FIX: Get full raw list to extract sources for label copying
       var raw_var_list = raw_vars.split("\n").filter(function(n){ return n != "" });
 
       
@@ -235,14 +227,7 @@ function calculate(is_preview){
 
       var match_args = args.join(", ");
       var name_arg = (suffix == "") ? "" : ", .names = \"{.col}" + suffix + "\"";
-
-      // FIX: Check for Input Type. If Character, wrap input in as.character(.)
-      var input_wrapper = ".";
-      if (in_type == "character") {
-          input_wrapper = "as.character(.)";
-      }
-
-      var func_call = "dplyr::case_match(" + input_wrapper + ", " + match_args + ")";
+      var func_call = "dplyr::case_match(., " + match_args + ")";
       if (as_fac == "1") { func_call = "as.factor(" + func_call + ")"; }
 
       var quoted_vars = vars.map(function(v) { return "'" + v + "'"; }).join(", ");
@@ -252,19 +237,15 @@ function calculate(is_preview){
 
       
       // MAIN MODE
-      // GOLDEN RULE 7 FIX: Hardcoded "design_rec" (matches initial="design_rec")
       echo("design_rec <- " + design_name + " %>% srvyr::as_survey() %>% dplyr::mutate(dplyr::across(c(" + quoted_vars + "), ~ " + func_call + name_arg + "))\n");
 
-      // Restore general labels
       echo(genLabelRestoreCode(design_name, "design_rec"));
 
-      // Explicitly copy labels for NEW recoded variables
       echo("\n# Copy variable labels to the new recoded variables\n");
       for (var i = 0; i < vars.length; i++) {
           var old_v = vars[i];
           var new_v = old_v + suffix;
           var source_path = raw_var_list[i];
-          // FIX: Access srvyr object like a dataframe
           echo("try(attr(design_rec[['" + new_v + "']], '.rk.meta') <- attr(" + source_path + ", '.rk.meta'), silent=TRUE)\n");
       }
         

@@ -43,11 +43,18 @@
 						<option label="Square Root (sqrt)" value="sqrt" />
 						<option label="Abs (abs)" value="abs" />
 						<option label="Standardize (scale)" value="scale" />
+						<option label="Mean (mean)" value="mean" />
+						<option label="Sum (sum)" value="sum" />
+						<option label="Standard Deviation (sd)" value="sd" />
+						<option label="Variance (var)" value="var" />
+						<option label="Minimum (min)" value="min" />
+						<option label="Maximum (max)" value="max" />
 						<option label="Convert to Numeric" value="as.numeric" />
 						<option label="Convert to Factor" value="as.factor" />
 						<option label="Custom..." value="custom" />
 					</dropdown>
 					<checkbox id="tr_narm_cbox" label="Ignore NAs (na.rm = TRUE)" value="1" checked="true" />
+					<checkbox id="tr_zeros_na_cbox" label="Treat Zeros as NA (e.g. for log)" value="1" />
 					<input label="Custom function (e.g., function(x) x^2)" id="func_cust" />
 					<stretch />
 				</column>
