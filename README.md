@@ -81,10 +81,10 @@ This plugin is not yet on CRAN. To install it, use the `remotes` or `devtools` p
 
     ```R
     # If you don't have devtools installed:
-    # install.packages("devtools")
+    # install.packages("remotes")
     
     local({
-      require(devtools)
+      require(remotes)
       install_github("AlfCano/rk.survey.wrangling", force = TRUE)
     })
     ```
