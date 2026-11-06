@@ -72,26 +72,44 @@ function preview(){
           if (lhs === "" || rhs === "") continue;
 
           var force_quote = lhs.indexOf(" ") > -1;
+
+          // Formateo del valor antiguo (LHS)
           if (in_type == "character" || force_quote) {
-             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\"";
+             if (lhs != "NA" && lhs.charAt(0) != '"' && lhs.charAt(0) != "'") lhs = "\"" + lhs + "\"";
           }
+
+          // Formateo del valor nuevo (RHS) con tipos estrictos para case_match
           if (out_type == "character") {
-             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\"";
+             if (rhs == "NA") rhs = "NA_character_";
+             else if (rhs.charAt(0) != '"' && rhs.charAt(0) != "'") rhs = "\"" + rhs + "\"";
+          } else {
+             if (rhs == "NA") rhs = "NA_real_";
           }
+
           args.push(lhs + " ~ " + rhs);
       }
 
+      // EL TRUCO MAGICO: Manejo seguro de la conversión de factores
       if (else_mode == "copy") {
-          if (in_type == out_type) { args.push(".default = ."); }
-          else {
-             if (out_type == "character") args.push(".default = as.character(.)");
-             else args.push(".default = as.numeric(.)");
+          if (out_type == "character") {
+              args.push(".default = as.character(.)");
+          } else {
+              // Convertimos a texto primero, y LUEGO a número, para burlar el índice del factor
+              args.push(".default = as.numeric(as.character(.))");
           }
       }
-      else if (else_mode == "na") { args.push(".default = NA"); }
+      else if (else_mode == "na") {
+          if (out_type == "character") args.push(".default = NA_character_");
+          else args.push(".default = NA_real_");
+      }
       else if (else_mode == "specific") {
           var def_val = else_custom;
-          if (out_type == "character" && def_val != "NA" && !def_val.startsWith("\"")) { def_val = "\"" + def_val + "\""; }
+          // SOLUCIÓN: charAt(0) y comillas doblemente escapadas para JS
+          if (out_type == "character" && def_val != "NA" && def_val.charAt(0) != '"' && def_val.charAt(0) != "'") {
+              def_val = "\"" + def_val + "\"";
+          } else if (out_type == "numeric" && def_val == "NA") {
+              def_val = "NA_real_";
+          }
           args.push(".default = " + def_val);
       }
 
@@ -202,26 +220,44 @@ function calculate(is_preview){
           if (lhs === "" || rhs === "") continue;
 
           var force_quote = lhs.indexOf(" ") > -1;
+
+          // Formateo del valor antiguo (LHS)
           if (in_type == "character" || force_quote) {
-             if (lhs != "NA" && !lhs.startsWith("\"") && !lhs.startsWith("\'")) lhs = "\"" + lhs + "\"";
+             if (lhs != "NA" && lhs.charAt(0) != '"' && lhs.charAt(0) != "'") lhs = "\"" + lhs + "\"";
           }
+
+          // Formateo del valor nuevo (RHS) con tipos estrictos para case_match
           if (out_type == "character") {
-             if (rhs != "NA" && !rhs.startsWith("\"") && !rhs.startsWith("\'")) rhs = "\"" + rhs + "\"";
+             if (rhs == "NA") rhs = "NA_character_";
+             else if (rhs.charAt(0) != '"' && rhs.charAt(0) != "'") rhs = "\"" + rhs + "\"";
+          } else {
+             if (rhs == "NA") rhs = "NA_real_";
           }
+
           args.push(lhs + " ~ " + rhs);
       }
 
+      // EL TRUCO MAGICO: Manejo seguro de la conversión de factores
       if (else_mode == "copy") {
-          if (in_type == out_type) { args.push(".default = ."); }
-          else {
-             if (out_type == "character") args.push(".default = as.character(.)");
-             else args.push(".default = as.numeric(.)");
+          if (out_type == "character") {
+              args.push(".default = as.character(.)");
+          } else {
+              // Convertimos a texto primero, y LUEGO a número, para burlar el índice del factor
+              args.push(".default = as.numeric(as.character(.))");
           }
       }
-      else if (else_mode == "na") { args.push(".default = NA"); }
+      else if (else_mode == "na") {
+          if (out_type == "character") args.push(".default = NA_character_");
+          else args.push(".default = NA_real_");
+      }
       else if (else_mode == "specific") {
           var def_val = else_custom;
-          if (out_type == "character" && def_val != "NA" && !def_val.startsWith("\"")) { def_val = "\"" + def_val + "\""; }
+          // SOLUCIÓN: charAt(0) y comillas doblemente escapadas para JS
+          if (out_type == "character" && def_val != "NA" && def_val.charAt(0) != '"' && def_val.charAt(0) != "'") {
+              def_val = "\"" + def_val + "\"";
+          } else if (out_type == "numeric" && def_val == "NA") {
+              def_val = "NA_real_";
+          }
           args.push(".default = " + def_val);
       }
 

@@ -1,11 +1,20 @@
 # rk.survey.wrangling: Tidy Manipulation of Complex Surveys
 
-![Version](https://img.shields.io/badge/Version-0.1.4-blue.svg)
+![Version](https://img.shields.io/badge/Version-0.1.5-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv3-blue.svg)
 ![RKWard](https://img.shields.io/badge/Platform-RKWard-green)
 [![R Linter](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml/badge.svg)](https://github.com/AlfCano/rk.survey.wrangling/actions/workflows/lintr.yml)
 
 **rk.survey.wrangling** extends RKWard's capabilities to handle complex survey designs (`svydesign` objects). It leverages the `{srvyr}` package to apply modern, "tidy" manipulation verbs (like `mutate`, `group_by`, and `across`) to survey data while automatically preserving sampling weights, stratification, and variance estimation parameters.
+
+___
+
+
+## 🚀 What's New in Version 0.1.5
+
+*   **Bulletproof Factor Recoding (The "Factor Trap" Fix):** Resolved a major issue when converting survey factors to numeric types. The Recode tool now routes variables through a robust `as.numeric(as.character(.))` pipeline, ensuring that string-based numbers (e.g., `"33000"`) are correctly extracted as real numbers rather than their internal factor index.
+*   **Strict Type-Safety:** The Batch Recode engine now automatically enforces `NA_real_` and `NA_character_` mapping. This prevents `dplyr::case_match()` from throwing fatal errors when mixing data types in the "Else" (default behavior) conditions.
+*   **QtScript Engine Stability:** Completely overhauled the internal JavaScript generator (escaping "backslash hell" and removing ES6 methods) to ensure 100% compatibility with RKWard's QtScript parser, preventing random UI crashes during complex custom recoding.
 
 ## 🚀 What's New in Version 0.1.4
 
@@ -44,6 +53,8 @@ Calculate new variables based on row-wise aggregation of items.
 *   **Methods:** Mean, Sum, Median, SD, Min/Max, Count (N valid).
 *   **Context:** Unlike standard data frames, this adds the new score directly into the survey design object, ready for weighted regression or tabulation.
 
+
+
 ### 🌍 Internationalization
 The interface is fully localized in:
 *   🇺🇸 English (Default)
@@ -51,6 +62,15 @@ The interface is fully localized in:
 *   🇫🇷 French (`fr`)
 *   🇩🇪 German (`de`)
 *   🇧🇷 Portuguese (Brazil) (`pt_BR`)
+
+## ⚙️ Prerequisites
+
+You must have [RKWard](https://rkward.kde.org/) installed along with the following R packages. The plugin will automatically attempt to load them when required:
+
+```R
+install.packages(c("srvyr", "survey", "dplyr"))
+
+```
 
 ## 📦 Installation
 
@@ -70,23 +90,31 @@ This plugin is not yet on CRAN. To install it, use the `remotes` or `devtools` p
     ```
 3.  **Restart RKWard** to load the new menu entries.
 
-## 💻 Usage
+---
 
-Once installed, the tools are organized under the **Survey** menu:
+## 🛠️ Usage Workflow
 
-**`Survey` -> `Survey Wrangling`**
+This plugin adds a comprehensive suite of tools under the **Survey > Survey Wrangling** menu in RKWard:
 
-1.  **Survey Batch Transform**
-2.  **Survey Batch Recode**
-3.  **Survey Composite Score**
+### 1. Survey Batch Transform
+Apply single functions across multiple survey variables.
+*   Select your survey design object and target variables.
+*   Choose standard functions (log, scale, mean) or inject custom lambda expressions.
+*   Handles NAs and structurally zero values on the fly.
 
-## 🛠️ Dependencies
+### 2. Survey Batch Recode
+The ultimate tool for cleaning demographic data (e.g., standardizing "Missing" values to `NA`).
+*   Map Old Values to New Values.
+*   Control the Default Behavior (Else): Copy original values, force to NA, or set a specific custom value.
+*   Safely convert outputs between Numeric and Factor types.
 
-This plugin relies on the following R packages:
-*   `srvyr` (The tidy-survey bridge)
-*   `survey` (Core statistical engine)
-*   `dplyr` (Manipulation logic)
-*   `rkwarddev` (Plugin generation)
+### 3. Survey Composite Score
+Aggregate multiple items (like Likert scale questions) into a single analytical score.
+*   Select the target items.
+*   Choose the aggregation method (Mean, Sum, Variance, SD).
+*   Name the new variable and save the updated survey object.
+
+---
 
 #### Troubleshooting: Errors installing `devtools` or missing binary dependencies (Windows)
 
